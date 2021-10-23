@@ -32,13 +32,18 @@ int main(int argc, char **argv)
         mx_del_strarr(&line_arr);
         mx_printerr("error: line 1 is not valid\n");
         exit(0);
-    }
+    }  
     int count_lines = 0;
+    for (int i = 1; line_arr[i] != NULL; i++)
+    {
+        count_lines++;
+    }
     int bridge_sum = 0;
-    t_bridge **bridges = malloc((line_num + 1) * sizeof *bridges);
-    bridges[line_num] = NULL;
-    char **nodes = malloc((line_num + 2) * sizeof(char **));
-    nodes[line_num + 1] = NULL;
+    t_bridge **bridges = malloc((count_lines + 1) * sizeof *bridges);
+    bridges[count_lines] = NULL;
+    char **nodes = malloc((count_lines + 1) * sizeof(char **));
+    nodes[count_lines] = NULL;
+    count_lines = 0;
     int count_nodes = 0;
     for (int i = 1; line_arr[i] != NULL; i++)
     {
@@ -105,9 +110,8 @@ int main(int argc, char **argv)
             }
         }
         count_lines++;
-        if (i > line_num) break;
     }
-    if (count_lines != line_num)
+    if (count_nodes != line_num)
     {
         mx_del_bridges(&bridges);
         mx_del_strarr(&nodes);
@@ -119,22 +123,7 @@ int main(int argc, char **argv)
     //----------------
 
     //solving graph
-    // t_bridge *buf;
-    // for (int i = 0; i < count_lines; i++)
-    // {
-    //     for (int j = i + 1; j < count_lines; j++)
-    //     {
-    //         if (bridges[i]->length > bridges[j]->length)
-    //         {
-    //             buf = bridges[i];
-    //             bridges[i] = bridges[j];
-    //             bridges[j] = buf;
-    //         }
-    //     }
-    // }
     int *weights = malloc((count_nodes + 1) * sizeof(int));
-    // char *buf_char;
-    // int max_weight = 0;
     for (int i = 0; i < count_nodes - 1; i++)
     {
         for (int j = i + 1; j < count_nodes; j++)
@@ -142,34 +131,7 @@ int main(int argc, char **argv)
             for (int z = 0; z < count_nodes; z++) weights[z] = -1;
             mx_set_weight(&weights, nodes, nodes[j], 0);
             mx_weigh_nodes(weights, nodes, bridges, count_nodes);
-            mx_print_path(weights, nodes, bridges, count_nodes, nodes[i], line_num);
-            // mx_print_strarr(nodes, ", ");
-            // for (int z = 0; z < count_nodes; z++)
-            // {
-            //     mx_printint(weights[z]);
-            //     if (z + 1 != count_nodes) mx_printchar(' ');
-            // }
-            // mx_printchar('\n');
-            // for (int z = 0; z < count_nodes; z++)
-            // {
-            //     if (weights[z] > max_weight) max_weight = weights[z];
-            // }
-            // for (int z = 0; z < count_nodes; z++)
-            // {
-            //     for (int g = z + 1; g < count_nodes; g++)
-            //     {
-            //         if (weights[z] == weights[g] && weights[g] == max_weight)
-            //         {
-            //             buf_char = nodes[z];
-            //             nodes[z] = nodes[g];
-            //             nodes[g] = buf_char;
-            //             mx_print_path(weights, nodes, bridges, count_nodes, nodes[i]);
-            //             buf_char = nodes[z];
-            //             nodes[z] = nodes[g];
-            //             nodes[g] = buf_char;
-            //         }
-            //     }
-            // }
+            mx_print_path(weights, nodes, bridges, count_nodes, nodes[i], count_lines);
         }
     }
 
