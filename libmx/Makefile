@@ -1,19 +1,18 @@
-all: libmx.a	
+all: libmx.a
 
 libmx.a: obj
-	ar -rcs libmx.a obj/*.o
+	@ar rcs libmx.a obj/*.o
 
 obj: src/*.c inc/*.h
-	mkdir obj
-	clang -std=c11 -Wall -Wextra -Werror -Wpedantic -c src/*.c -I inc
-	mv *.o obj
+	@mkdir -p obj
+	@clang -std=c11 -Wall -Wextra -Werror -Wpedantic -c src/*.c -I inc
+	@mv *.o obj
 
 clean:
-	rm -rf obj
+	@rm -rf obj
 
-uninstall: clean all
-	rm libmx.a
+uninstall: clean
+	@rm -f libmx.a
 
-reinstall:
-	make uninstall
-	make
+reinstall: uninstall all
+
