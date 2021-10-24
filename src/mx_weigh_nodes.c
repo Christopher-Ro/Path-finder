@@ -20,6 +20,7 @@ void mx_weigh_nodes(int *weights, char **nodes,
     for (int i = 0; i < count; i++)
     {
         min = 0;
+        while (is_visited(visited, nodes[min], visits)) min++;
         if (visits == count) break;
         for (int j = 0; j < count; j++)
         {
