@@ -41,8 +41,8 @@ int main(int argc, char **argv)
     int bridge_sum = 0;
     t_bridge **bridges = malloc((count_lines + 1) * sizeof *bridges);
     bridges[count_lines] = NULL;
-    char **nodes = malloc((count_lines + 1) * sizeof(char **));
-    nodes[count_lines] = NULL;
+    char **nodes = malloc((line_num + 1) * sizeof(char **));
+    nodes[line_num] = NULL;
     count_lines = 0;
     int count_nodes = 0;
     for (int i = 1; line_arr[i] != NULL; i++)
@@ -110,6 +110,8 @@ int main(int argc, char **argv)
             }
         }
         count_lines++;
+        if (count_nodes > line_num) break;
+        nodes[count_nodes] = NULL;
     }
     if (count_nodes != line_num)
     {
