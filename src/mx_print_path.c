@@ -16,9 +16,9 @@ int get_path(int *len, int *weights, char **nodes, t_bridge **bridges, int count
     int from_weight = 0;
     int steps = 1;
     char *cur_node = from;
-    int prev_bridge_i = 0;
+    int prev_bridge_i = -1;
     path[0] = from;
-    int needed_bridge = 0;
+    int needed_bridge = -1;
     bool break_flag = true;
     bool fell = true;
     for (int j = 0; j < count + 1 && break_flag; j++)
@@ -83,6 +83,13 @@ int get_path(int *len, int *weights, char **nodes, t_bridge **bridges, int count
                 *permblkd += 1;
                 *blked = *permblkd;
             }
+        }
+        if (!break_flag && (!mx_strcmp(bridges[needed_bridge]->A, path[0])
+            || !mx_strcmp(bridges[needed_bridge]->B, path[0])))
+        {
+            blacklist[*permblkd] = needed_bridge;
+            *permblkd += 1;
+            *blked = *permblkd;
         }
     }
     path[steps] = NULL;

@@ -22,5 +22,6 @@ int mx_set_path(char ***path, int *weights,
                 char **nodes, char *to,
                 char *from, t_bridge **bridges);
 int mx_get_weight(char **nodes, int *weights, char *s);
+int get_node_index(char **nodes, char *node);
 
 #endif /* PATHFIND */

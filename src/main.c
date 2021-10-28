@@ -41,8 +41,8 @@ int main(int argc, char **argv)
     int bridge_sum = 0;
     t_bridge **bridges = malloc((count_lines + 1) * sizeof *bridges);
     bridges[count_lines] = NULL;
-    char **nodes = malloc((line_num + 1) * sizeof(char **));
-    nodes[line_num] = NULL;
+    char **nodes = malloc((count_lines + 1) * sizeof(char **));
+    nodes[count_lines] = NULL;
     count_lines = 0;
     int count_nodes = 0;
     for (int i = 1; line_arr[i] != NULL; i++)
@@ -110,8 +110,6 @@ int main(int argc, char **argv)
             }
         }
         count_lines++;
-        if (count_nodes > line_num) break;
-        nodes[count_nodes] = NULL;
     }
     if (count_nodes != line_num)
     {
@@ -122,9 +120,28 @@ int main(int argc, char **argv)
         exit(0);
     }
     
-    //----------------
+    // ----------------
 
-    //solving graph
+    // solving graph
+
+    t_bridge *buf;
+
+    for (int i = 0; bridges[i] != NULL; i++)
+    {
+        for (int j = i + 1; bridges[j] != NULL; j++)
+        {
+            if (get_node_index(nodes, bridges[i]->A) +
+                get_node_index(nodes, bridges[i]->B) >
+                get_node_index(nodes, bridges[j]->A) +
+                get_node_index(nodes, bridges[j]->B))
+            {
+                buf = bridges[i];
+                bridges[i] = bridges[j];
+                bridges[j] = buf;
+            }
+        }
+    }
+
     int *weights = malloc((count_nodes + 1) * sizeof(int));
     for (int i = 0; i < count_nodes - 1; i++)
     {
